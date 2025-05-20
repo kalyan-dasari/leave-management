@@ -131,6 +131,10 @@ def status():
     return render_template('status.html', leaves=leaves)
 
 
-if __name__ == '__main__':
-    init_db()
-    app.run(debug=True)
+# if __name__ == '__main__':
+#     init_db()
+#     app.run(host='0.0.0.0', port=int(environ.get("PORT", 5000)))
+if __name__ == "__main__":
+    from os import environ
+    app.run(host='0.0.0.0', port=int(environ.get("PORT", 5000)))
+
