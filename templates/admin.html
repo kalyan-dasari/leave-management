@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel - Leave Requests</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="container mt-5">
+
+  <h2 class="mb-4">Leave Requests</h2>
+
+  <table class="table table-bordered">
+    <thead class="table-dark">
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Branch</th>
+        <th>Date</th>
+        <th>Reason</th>
+        <th>Submitted On</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for leave in leaves %}
+      <tr>
+        <td>{{ leave[1] }}</td>
+        <td>{{ leave[2] }}</td>
+        <td>{{ leave[3] }}</td>
+        <td>{{ leave[4] }}</td>
+        <td>{{ leave[5] }}</td>
+        <td>{{ leave[6] }}</td>
+        <td>{{ leave[7] }}</td>
+        <td>
+          <form method="POST" action="{{ url_for('update_status') }}">
+            <input type="hidden" name="id" value="{{ leave[0] }}">
+            <div class="d-flex">
+              <select name="status" class="form-select me-2">
+                <option value="Approved" {% if leave[7] == 'Approved' %}selected{% endif %}>Approve</option>
+                <option value="Rejected" {% if leave[7] == 'Rejected' %}selected{% endif %}>Reject</option>
+              </select>
+              <button type="submit" class="btn btn-primary btn-sm">Update</button>
+            </div>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <a href="/" class="btn btn-secondary mt-3">Back</a>
+  <a href="{{ url_for('logout') }}" class="btn btn-danger mt-3 ms-2">Logout</a>
+
+</body>
+</html>
