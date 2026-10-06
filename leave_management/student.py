@@ -255,13 +255,14 @@ def respond(request_id):
 @bp.route("/balances")
 @roles_required("student")
 def balances():
+    _ensure_student_balances(g.user["id"])
     rows = query(
         """SELECT b.*, t.name AS leave_type_name, t.description
            FROM leave_balances b JOIN leave_types t ON t.id = b.leave_type_id
            WHERE b.student_id = ? ORDER BY t.name""",
         (g.user["id"],),
     )
-    return render_template("student/balances.html", balances=rows, year=str(date.today().year))
+    return render_template("student/balances.html", balances=rows, year=academic_year(date.today()))
 
 
 @bp.route("/attachments/<int:request_id>")
