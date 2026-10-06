@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% from "_macros.html" import pager %}
+{% block title %}Audit Logs{% endblock %}
+{% block content %}
+<h3 class="mb-3">Audit logs</h3>
+{% if not logs %}
+<div class="alert alert-light border text-center py-5 text-muted">No audit entries recorded yet.</div>
+{% else %}
+<div class="table-responsive">
+  <table class="table table-sm table-striped align-middle">
+    <thead class="table-light"><tr><th>Time (UTC)</th><th>User</th><th>Action</th><th>Entity</th><th>Details</th></tr></thead>
+    <tbody>
+      {% for l in logs %}
+      <tr>
+        <td class="text-nowrap">{{ l.created_at }}</td>
+        <td>{{ l.user_name or 'anonymous' }}</td>
+        <td><span class="badge bg-secondary">{{ l.action }}</span></td>
+        <td>{{ l.entity or '-' }}{% if l.entity_id %}#{{ l.entity_id }}{% endif %}</td>
+        <td class="small text-muted">{{ l.details }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{{ pager(page, total, per_page) }}
+{% endif %}
+{% endblock %}

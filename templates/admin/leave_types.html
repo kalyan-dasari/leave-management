@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Leave Types{% endblock %}
+{% block content %}
+<h3 class="mb-3">Leave types &amp; rules</h3>
+<div class="row g-3">
+  <div class="col-lg-7">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead class="table-light">
+          <tr><th>Name</th><th>Max days</th><th>Document</th><th>HOD</th><th>Requests</th><th>Active</th><th></th></tr>
+        </thead>
+        <tbody>
+          {% for t in leave_types %}
+          <tr class="{{ '' if t.active else 'table-secondary' }}">
+            <td>{{ t.name }}<br><small class="text-muted">{{ t.description }}</small></td>
+            <td>{{ t.max_days }}</td>
+            <td>{{ 'Required' if t.requires_document else 'Optional' }}</td>
+            <td>{{ 'Yes' if t.hod_required else 'No' }}</td>
+            <td>{{ t.requests }}</td>
+            <td>{{ 'Yes' if t.active else 'No' }}</td>
+            <td class="text-end">
+              <form method="post" action="{{ url_for('admin.toggle_leave_type', type_id=t.id) }}" class="d-inline">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button class="btn btn-sm {{ 'btn-outline-danger' if t.active else 'btn-outline-success' }}">
+                  {{ 'Deactivate' if t.active else 'Activate' }}
+                </button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="card">
+      <div class="card-header">Add leave type</div>
+      <div class="card-body">
+        <form method="post">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <div class="mb-2"><label class="form-label small">Name</label>
+            <input class="form-control form-control-sm" name="name" required></div>
+          <div class="mb-2"><label class="form-label small">Description</label>
+            <textarea class="form-control form-control-sm" name="description" rows="2"></textarea></div>
+          <div class="mb-2"><label class="form-label small">Maximum days</label>
+            <input type="number" class="form-control form-control-sm" name="max_days" value="10" min="1"></div>
+          <div class="form-check mb-1">
+            <input class="form-check-input" type="checkbox" name="requires_document" id="doc">
+            <label class="form-check-label small" for="doc">Supporting document required</label>
+          </div>
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" name="hod_required" id="hod">
+            <label class="form-check-label small" for="hod">HOD approval required (level 2)</label>
+          </div>
+          <button class="btn btn-primary btn-sm">Create</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

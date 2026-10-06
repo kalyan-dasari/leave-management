@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Holidays{% endblock %}
+{% block content %}
+<h3 class="mb-3">Holidays</h3>
+<div class="row g-3">
+  <div class="col-lg-7">
+    {% if not holidays %}
+    <div class="alert alert-light border text-muted">No holidays configured. Holiday dates are excluded from leave day counts.</div>
+    {% else %}
+    <table class="table table-hover align-middle">
+      <thead class="table-light"><tr><th>Date</th><th>Name</th><th></th></tr></thead>
+      <tbody>
+        {% for h in holidays %}
+        <tr>
+          <td>{{ h.date }}</td>
+          <td>{{ h.name }}</td>
+          <td class="text-end">
+            <form method="post" action="{{ url_for('admin.delete_holiday', holiday_id=h.id) }}" class="d-inline"
+                  onsubmit="return confirm('Remove this holiday?');">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="btn btn-sm btn-outline-danger">Remove</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+  </div>
+  <div class="col-lg-5">
+    <div class="card">
+      <div class="card-header">Add holiday</div>
+      <div class="card-body">
+        <form method="post">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <div class="mb-2"><label class="form-label small">Name</label>
+            <input class="form-control form-control-sm" name="name" required></div>
+          <div class="mb-2"><label class="form-label small">Date</label>
+            <input type="date" class="form-control form-control-sm" name="date" required></div>
+          <button class="btn btn-primary btn-sm">Add</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
