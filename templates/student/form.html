@@ -41,8 +41,9 @@
                    value="{{ form.get('contact_info', '') }}" required>
           </div>
           <div class="mb-3">
-            <label class="form-label">Supporting document <span class="text-muted small">(PDF, JPG or PNG, max 5 MB)</span></label>
+            <label class="form-label">Supporting document <span class="badge bg-light text-secondary border ms-1">Optional</span> <span class="text-muted small">(PDF, JPG or PNG, max 5 MB)</span></label>
             <input type="file" class="form-control" name="attachment" accept=".pdf,.jpg,.jpeg,.png">
+            <div class="form-text text-muted">Upload any medical prescription, certificate, or official event permission if available.</div>
           </div>
           <div class="d-flex gap-2">
             <button class="btn btn-primary">Submit request</button>

@@ -82,8 +82,7 @@ def validate_leave(*, student_id, leave_type, start_raw, end_raw, reason, contac
     if leave_type["max_days"] and days > leave_type["max_days"]:
         errors.append(f"{leave_type['name']} leave is limited to {leave_type['max_days']} day(s); you selected {days}.")
 
-    if leave_type["requires_document"] and not has_attachment:
-        errors.append(f"{leave_type['name']} leave requires a supporting document (PDF, JPG or PNG, max 5 MB).")
+    # Supporting documents are optional across all leave categories
 
     overlap = query(
         """SELECT request_no FROM leave_requests

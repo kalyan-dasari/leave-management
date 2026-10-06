@@ -156,7 +156,7 @@ def test_insufficient_balance_rejected(app, student_client):
     assert b"Insufficient Casual Leave leave balance" in resp.data
 
 
-def test_medical_requires_document(app, student_client):
+def test_medical_document_is_optional(app, student_client):
     monday = next_weekday()
     resp = submit_leave(
         student_client,
@@ -165,7 +165,8 @@ def test_medical_requires_document(app, student_client):
         end=monday + timedelta(days=2),
         reason="Fever and doctor consultation advised rest.",
     )
-    assert b"requires a supporting document" in resp.data
+    assert resp.status_code == 302
+    assert "/student/" in resp.headers["Location"]
 
 
 def test_valid_submission_with_attachment(app, student_client, tmp_path):
