@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Leave Balance{% endblock %}
+{% block content %}
+<h3 class="mb-3">Leave balance</h3>
+{% if not balances %}
+<div class="alert alert-light border text-center py-5 text-muted">No leave balances have been allocated yet. Contact your administrator.</div>
+{% else %}
+<div class="table-responsive">
+  <table class="table table-bordered align-middle">
+    <thead class="table-light">
+      <tr><th>Leave type</th><th>Description</th><th>Allocated</th><th>Used</th><th>Remaining</th></tr>
+    </thead>
+    <tbody>
+      {% for b in balances %}
+      <tr>
+        <td>{{ b.leave_type_name }}</td>
+        <td class="text-muted">{{ b.description or '-' }}</td>
+        <td>{{ b.allocated }}</td>
+        <td>{{ b.used }}</td>
+        <td><strong class="{{ 'text-danger' if b.remaining <= 0 else '' }}">{{ b.remaining }}</strong></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+<a href="{{ url_for('student.dashboard') }}" class="btn btn-outline-secondary btn-sm">&larr; Back</a>
+{% endblock %}
