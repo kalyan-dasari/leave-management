@@ -153,7 +153,7 @@ def test_insufficient_balance_rejected(app, student_client):
         start=monday,
         end=monday + timedelta(days=1),
     )
-    assert b"Insufficient Casual Leave balance" in resp.data
+    assert b"Insufficient Casual Leave leave balance" in resp.data
 
 
 def test_medical_requires_document(app, student_client):
