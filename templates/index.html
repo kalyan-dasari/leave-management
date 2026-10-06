@@ -5,12 +5,20 @@
 <!-- Hero Section with University Branding -->
 <div class="hero-wrapper">
   <div class="position-relative" style="z-index: 2;">
-    <div class="d-flex align-items-center gap-3 mb-3">
-      <div class="bg-white p-2 rounded-4 shadow-sm d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-        <img src="{{ url_for('static', filename='images/mru-logo.png') }}" alt="Malla Reddy University Logo" style="max-height: 48px; max-width: 48px; object-fit: contain;">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 pb-3 border-bottom border-white border-opacity-15">
+      <div class="d-flex align-items-center gap-3">
+        <div class="bg-white px-3 py-2 rounded-3 shadow d-inline-flex align-items-center justify-content-center border border-white border-opacity-50" style="height: 72px; width: 100px;">
+          <img src="{{ url_for('static', filename='images/mru-logo.png') }}" alt="Malla Reddy University Logo" style="max-height: 56px; max-width: 88px; object-fit: contain;">
+        </div>
+        <div>
+          <div class="hero-kicker mb-1">
+            <i class="bi bi-patch-check-fill text-warning"></i> Official Digital Portal
+          </div>
+          <h4 class="fw-bold text-white mb-0" style="letter-spacing: -0.01em;">MALLA REDDY UNIVERSITY</h4>
+        </div>
       </div>
-      <div class="hero-kicker mb-0">
-        <i class="bi bi-patch-check-fill text-warning"></i> Malla Reddy University &bull; Official Digital Portal
+      <div class="d-none d-md-flex align-items-center gap-2 bg-white bg-opacity-10 rounded-pill px-3 py-1 text-white border border-white border-opacity-25 small">
+        <i class="bi bi-shield-check text-warning"></i> Campus Leave Governance System
       </div>
     </div>
     <h1 class="hero-title">Smart Student Leave Management &amp; Approval System</h1>
