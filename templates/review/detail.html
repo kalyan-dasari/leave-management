@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% from "_macros.html" import status_badge %}
+{% block title %}{{ leave.request_no }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+  <div>
+    <h3 class="mb-0 font-monospace">{{ leave.request_no }}</h3>
+    <span class="text-muted small">Submitted {{ leave.created_at }} &middot; approval level {{ leave.current_level }}</span>
+  </div>
+  <div>{{ status_badge(leave.status) }}</div>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-7">
+    <div class="card mb-3">
+      <div class="card-header">Student information</div>
+      <div class="card-body">
+        <dl class="row mb-0">
+          <dt class="col-sm-4">Name</dt><dd class="col-sm-8">{{ leave.student_name }}</dd>
+          <dt class="col-sm-4">Roll number</dt><dd class="col-sm-8">{{ leave.roll_no or '-' }}</dd>
+          <dt class="col-sm-4">Email</dt><dd class="col-sm-8">{{ leave.student_email }}</dd>
+          <dt class="col-sm-4">Department / Branch</dt><dd class="col-sm-8">{{ leave.department_name or '-' }} {{ leave.branch_name or '' }}</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-header">Leave request</div>
+      <div class="card-body">
+        <dl class="row mb-0">
+          <dt class="col-sm-4">Leave type</dt>
+          <dd class="col-sm-8">{{ leave.leave_type_name }}
+            {% if leave.hod_required %}<span class="badge bg-secondary">HOD approval required</span>{% endif %}
+            {% if leave.requires_document %}<span class="badge bg-info text-dark">Document required</span>{% endif %}
+          </dd>
+          <dt class="col-sm-4">Dates</dt><dd class="col-sm-8">{{ leave.start_date }} &rarr; {{ leave.end_date }}</dd>
+          <dt class="col-sm-4">Reason</dt><dd class="col-sm-8">{{ leave.reason }}</dd>
+          <dt class="col-sm-4">Contact</dt><dd class="col-sm-8">{{ leave.contact_info }}</dd>
+          <dt class="col-sm-4">Attachment</dt>
+          <dd class="col-sm-8">
+            {% if leave.attachment_path %}
+              <a href="{{ url_for('student.attachment', request_id=leave.id) }}">Download document</a>
+            {% else %}<span class="text-muted">None provided</span>{% endif %}
+          </dd>
+        </dl>
+      </div>
+    </div>
+
+    {% if can_decide %}
+    <div class="card border-primary">
+      <div class="card-header bg-primary text-white">Your decision (level {{ leave.current_level }})</div>
+      <div class="card-body">
+        <form method="post" action="{{ url_for('review.decision', request_id=leave.id) }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <label class="form-label">Remarks</label>
+          <textarea class="form-control mb-2" name="remarks" rows="2"
+                    placeholder="Optional for approval, mandatory for rejection"></textarea>
+          <div class="d-flex gap-2 flex-wrap">
+            <button class="btn btn-success" name="action" value="approve">Approve</button>
+            <button class="btn btn-danger" name="action" value="reject"
+                    onclick="return confirm('Reject this request? A reason is required.');">Reject</button>
+            <button class="btn btn-info" name="action" value="request_info">Request more information</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    {% elif leave.status in ('Pending', 'More Information Required') %}
+    <div class="alert alert-warning mb-0">
+      This request is awaiting action at level {{ leave.current_level }}
+      ({{ 'Head of Department' if leave.current_level == 2 else 'faculty' }}) and cannot be decided from your role right now.
+    </div>
+    {% else %}
+    <div class="alert alert-light border mb-0">This request has been finalised.</div>
+    {% endif %}
+  </div>
+
+  <div class="col-lg-5">
+    <div class="card">
+      <div class="card-header">Status timeline</div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <div class="fw-semibold">Submitted</div>
+          <div class="small text-muted">{{ leave.created_at }} by {{ leave.student_name }}</div>
+        </li>
+        {% for item in timeline %}
+        <li class="list-group-item">
+          <div class="fw-semibold">{{ item.action }}
+            {% if item.level > 1 %}<span class="badge bg-secondary">Level {{ item.level }}</span>{% endif %}
+          </div>
+          <div class="small text-muted">{{ item.action_time }} &middot; {{ item.reviewer_name }} ({{ item.reviewer_role }})</div>
+          {% if item.remarks %}<div class="small fst-italic">"{{ item.remarks }}"</div>{% endif %}
+        </li>
+        {% endfor %}
+        {% if leave.status in ('Pending', 'More Information Required') %}
+        <li class="list-group-item text-muted small">Awaiting decision at level {{ leave.current_level }}...</li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<a href="{{ url_for('review.dashboard') }}" class="btn btn-outline-secondary btn-sm mt-3">&larr; Back to queue</a>
+{% endblock %}
