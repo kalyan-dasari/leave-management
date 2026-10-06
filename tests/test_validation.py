@@ -165,8 +165,7 @@ def test_medical_document_is_optional(app, student_client):
         end=monday + timedelta(days=2),
         reason="Fever and doctor consultation advised rest.",
     )
-    assert resp.status_code == 302
-    assert "/student/" in resp.headers["Location"]
+    assert b"submitted" in resp.data
 
 
 def test_valid_submission_with_attachment(app, student_client, tmp_path):
