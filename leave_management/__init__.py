@@ -30,6 +30,7 @@ def create_app(test_config=None):
         MAIL_DEFAULT_SENDER=os.environ.get("MAIL_DEFAULT_SENDER") or os.environ.get("MAIL_USERNAME"),
         PER_PAGE=10,
         WTF_CSRF_ENABLED=True,
+        TEMPLATES_AUTO_RELOAD=True,
     )
     if test_config:
         app.config.update(test_config)
