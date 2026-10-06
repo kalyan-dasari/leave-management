@@ -8,7 +8,7 @@ from datetime import date, timedelta
 from werkzeug.security import generate_password_hash
 
 from leave_management import create_app
-from leave_management.db import execute, query, utcnow
+from leave_management.db import utcnow
 from leave_management.validators import academic_year
 
 PASSWORDS = {
