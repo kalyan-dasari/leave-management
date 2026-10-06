@@ -4,6 +4,13 @@ DATE_FMT = "%Y-%m-%d"
 MIN_REASON_LENGTH = 10
 
 
+def page_number(raw, default=1) -> int:
+    try:
+        return max(int(raw or default), 1)
+    except (TypeError, ValueError):
+        return default
+
+
 def parse_date(value) -> date | None:
     if not value:
         return None

@@ -3,7 +3,7 @@ from flask import Blueprint, current_app, flash, g, redirect, render_template, r
 from .audit import audit
 from .db import query
 from .security import roles_required
-from .validators import parse_date
+from .validators import page_number, parse_date
 from .workflow import apply_decision, finalize_completed
 
 bp = Blueprint("review", __name__, url_prefix="/review")
@@ -54,7 +54,7 @@ def dashboard():
     leave_type = request.args.get("type", "")
     date_from = request.args.get("from", "")
     date_to = request.args.get("to", "")
-    page = max(int(request.args.get("page", 1) or 1), 1)
+    page = page_number(request.args.get("page"))
 
     dept_clause, dept_args = _visible_requests()
     where = [dept_clause]

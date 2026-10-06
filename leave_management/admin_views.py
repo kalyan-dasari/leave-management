@@ -7,6 +7,7 @@ from werkzeug.security import generate_password_hash
 from .audit import audit
 from .db import execute, query, utcnow
 from .security import roles_required
+from .validators import page_number
 
 bp = Blueprint("admin", __name__, url_prefix="/admin")
 
@@ -351,7 +352,7 @@ def export_csv():
 @bp.route("/audit")
 @roles_required("admin")
 def audit_logs():
-    page = max(int(request.args.get("page", 1) or 1), 1)
+    page = page_number(request.args.get("page"))
     per_page = 25
     total = query("SELECT COUNT(*) AS n FROM audit_logs", one=True)["n"]
     rows = query(

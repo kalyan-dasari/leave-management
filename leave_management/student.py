@@ -18,7 +18,7 @@ from werkzeug.utils import secure_filename
 from .audit import audit
 from .db import execute, query, utcnow
 from .security import login_required, roles_required
-from .validators import load_holiday_dates, parse_date, validate_leave, working_days
+from .validators import load_holiday_dates, page_number, parse_date, validate_leave, working_days
 from .workflow import cancel_request, create_leave_request, finalize_completed, respond_to_request
 
 bp = Blueprint("student", __name__, url_prefix="/student")
@@ -55,7 +55,7 @@ def dashboard():
     leave_type = request.args.get("type", "")
     date_from = request.args.get("from", "")
     date_to = request.args.get("to", "")
-    page = max(int(request.args.get("page", 1) or 1), 1)
+    page = page_number(request.args.get("page"))
 
     where = ["r.student_id = ?"]
     args = [student_id]
