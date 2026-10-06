@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}Leave Portal{% endblock %} - Malla Reddy University</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/mru-logo.png') }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -15,9 +16,7 @@
 <nav class="navbar navbar-expand-lg mru-navbar no-print">
   <div class="container">
     <a class="navbar-brand mru-brand-title" href="{{ url_for('main.dashboard') }}">
-      <span class="d-inline-flex align-items-center justify-content-center bg-white text-primary rounded-circle shadow-sm" style="width: 38px; height: 38px; font-size: 1.15rem;">
-        <i class="bi bi-mortarboard-fill"></i>
-      </span>
+      <img src="{{ url_for('static', filename='images/mru-logo.png') }}" alt="MRU Logo" class="bg-white rounded-circle p-1 shadow-sm" style="height: 38px; width: 38px; object-fit: contain;">
       <span>MRU Leave Portal</span>
       <span class="mru-brand-badge d-none d-sm-inline-block">Malla Reddy University</span>
     </a>
@@ -99,9 +98,10 @@
 </main>
 
 <footer class="mt-auto py-4 bg-white border-top text-muted small no-print">
-  <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
-    <div>
-      <strong class="text-dark">Smart Student Leave Management &amp; Approval System</strong> &middot; Malla Reddy University
+  <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+    <div class="d-flex align-items-center gap-2">
+      <img src="{{ url_for('static', filename='images/mru-logo.png') }}" alt="MRU Logo" style="height: 28px; width: 28px; object-fit: contain;">
+      <span><strong class="text-dark">Smart Student Leave Management &amp; Approval System</strong> &middot; Malla Reddy University</span>
     </div>
     <div class="d-flex gap-3">
       <a href="{{ url_for('main.track') }}" class="text-decoration-none text-muted"><i class="bi bi-search me-1"></i>Track Leave</a>
