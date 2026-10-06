@@ -18,7 +18,7 @@ from werkzeug.utils import secure_filename
 from .audit import audit
 from .db import execute, query, utcnow
 from .security import login_required, roles_required
-from .validators import DATE_FMT, parse_date, validate_leave
+from .validators import load_holiday_dates, parse_date, validate_leave, working_days
 from .workflow import cancel_request, create_leave_request, finalize_completed, respond_to_request
 
 bp = Blueprint("student", __name__, url_prefix="/student")
@@ -83,6 +83,11 @@ def dashboard():
             LIMIT ? OFFSET ?""",
         (*args, per_page, (page - 1) * per_page),
     )
+    holidays = load_holiday_dates(query)
+    requests = [
+        {**dict(row), "days": working_days(parse_date(row["start_date"]), parse_date(row["end_date"]), holidays)}
+        for row in rows
+    ]
     stats = {
         s["status"]: s["n"]
         for s in query(
