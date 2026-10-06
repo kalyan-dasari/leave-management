@@ -4,7 +4,7 @@ import secrets
 from pathlib import Path
 
 from dotenv import load_dotenv
-from flask import Flask, render_template
+from flask import Flask, flash, g, redirect, render_template, url_for
 from flask_wtf.csrf import CSRFProtect
 
 from . import db as db_module
@@ -40,12 +40,11 @@ def create_app(test_config=None):
     Path(app.config["UPLOAD_FOLDER"]).mkdir(parents=True, exist_ok=True)
 
     db_module.init_app(app)
-    csrf = CSRFProtect(app)
+    CSRFProtect(app)
 
     with app.app_context():
         db_module.init_db()
 
-    from .audit import audit as audit_log
     from .notify import unread_count
 
     @app.before_request
@@ -54,15 +53,11 @@ def create_app(test_config=None):
 
     @app.context_processor
     def _inject_globals():
+        user = getattr(g, "user", None)
         return {
-            "current_user": getattr(g := None, "user", None) or _user(),
-            "unread_count": unread_count(_user()["id"]) if _user() else 0,
+            "current_user": user,
+            "unread_count": unread_count(user["id"]) if user else 0,
         }
-
-    def _user():
-        from flask import g
-
-        return getattr(g, "user", None)
 
     @app.errorhandler(403)
     def forbidden(_e):
@@ -74,13 +69,10 @@ def create_app(test_config=None):
 
     @app.errorhandler(413)
     def too_large(_e):
-        from flask import flash, redirect, url_for
-
-        flash("Attachment is too large (max 5 MB).", "danger")
+        flash("Attachment is too large (maximum 5 MB).", "danger")
         return redirect(url_for("student.new_request")), 413
 
-    from . import auth, main, review, student
-    from . import admin_views
+    from . import admin_views, auth, main, review, student
 
     app.register_blueprint(main.bp)
     app.register_blueprint(auth.bp)
