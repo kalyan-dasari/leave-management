@@ -11,7 +11,7 @@ bp = Blueprint("auth", __name__)
 @bp.route("/login", methods=["GET", "POST"])
 def login():
     if g.user:
-        return redirect(url_for("dashboard"))
+        return redirect(redirect_by_role(g.user["role"]))
     if request.method == "POST":
         email = (request.form.get("email") or "").strip()
         password = request.form.get("password") or ""
@@ -33,7 +33,7 @@ def login():
 @bp.route("/register", methods=["GET", "POST"])
 def register():
     if g.user:
-        return redirect(url_for("dashboard"))
+        return redirect(redirect_by_role(g.user["role"]))
     departments = query("SELECT * FROM departments WHERE active = 1 ORDER BY name")
     branches = query("SELECT * FROM branches WHERE active = 1 ORDER BY name")
     if request.method == "POST":

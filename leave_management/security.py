@@ -25,7 +25,7 @@ def load_user():
 def _safe_next(target: str) -> str:
     if target and target.startswith("/") and not target.startswith("//"):
         return target
-    return url_for("dashboard")
+    return url_for("main.dashboard")
 
 
 def login_required(view):
