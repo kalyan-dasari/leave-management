@@ -104,7 +104,7 @@ def dashboard():
     leave_types = query("SELECT * FROM leave_types WHERE active = 1 ORDER BY name")
     return render_template(
         "student/dashboard.html",
-        requests=rows,
+        requests=requests,
         stats=stats,
         balances=balances,
         leave_types=leave_types,
