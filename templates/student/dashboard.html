@@ -77,7 +77,7 @@
         <td class="font-monospace">{{ r.request_no }}</td>
         <td>{{ r.leave_type_name }}</td>
         <td>{{ r.start_date }} &rarr; {{ r.end_date }}</td>
-        <td>{{ (r.end_date[:10] and ((r.start_date, r.end_date) and '')) or '' }}{{ (r.start_date[8:10]|int) and '' }}{{ ((r.end_date[8:10]|int) - (r.start_date[8:10]|int) + 1) if r.start_date[:7] == r.end_date[:7] else '—' }}</td>
+        <td>{{ r.days }}</td>
         <td>{{ r.created_at[:10] }}</td>
         <td>{{ status_badge(r.status) }}</td>
         <td class="text-end"><a class="btn btn-sm btn-outline-primary" href="{{ url_for('student.detail', request_id=r.id) }}">View</a></td>
