@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Sign In{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-5 col-lg-4">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <h4 class="mb-4">Sign in</h4>
+        <form method="post">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <div class="mb-3">
+            <label class="form-label" for="email">Email</label>
+            <input type="email" class="form-control" id="email" name="email" required autofocus>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+          </div>
+          <button class="btn btn-primary w-100">Sign in</button>
+        </form>
+        <p class="small mt-3 mb-0">No account? <a href="{{ url_for('auth.register') }}">Register as a student</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
