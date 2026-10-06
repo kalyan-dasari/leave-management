@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Notifications{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3 class="mb-0">Notifications</h3>
+  {% if notifications %}
+  <form method="post" action="{{ url_for('main.mark_all_read') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button class="btn btn-sm btn-outline-primary">Mark all as read</button>
+  </form>
+  {% endif %}
+</div>
+
+{% if not notifications %}
+<div class="alert alert-light border text-center py-5">
+  <p class="mb-0 text-muted">You have no notifications yet.</p>
+</div>
+{% else %}
+<div class="list-group">
+  {% for n in notifications %}
+  <div class="list-group-item {{ 'active' if not n.is_read }}">
+    <div class="d-flex justify-content-between">
+      <p class="mb-1">{{ n.message }}</p>
+      <small class="text-nowrap ms-3 {{ 'text-white' if not n.is_read else 'text-muted' }}">{{ n.sent_at }}</small>
+    </div>
+    {% if n.request_id %}
+    <small>
+      {% if current_user.role == 'student' %}
+      <a href="{{ url_for('student.detail', request_id=n.request_id) }}" class="{{ 'text-white' if not n.is_read }}">View request</a>
+      {% else %}
+      <a href="{{ url_for('review.detail', request_id=n.request_id) }}" class="{{ 'text-white' if not n.is_read }}">View request</a>
+      {% endif %}
+    </small>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

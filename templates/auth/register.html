@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Student Registration{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8 col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <h4 class="mb-4">Student registration</h4>
+        <form method="post">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Full name</label>
+              <input type="text" class="form-control" name="name" value="{{ form.get('name', '') }}" required minlength="3">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Roll number</label>
+              <input type="text" class="form-control" name="roll_no" value="{{ form.get('roll_no', '') }}" required>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" name="email" value="{{ form.get('email', '') }}" required>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Department</label>
+              <select class="form-select" name="department_id" required>
+                <option value="">Select department</option>
+                {% for d in departments %}
+                <option value="{{ d.id }}" {{ 'selected' if form.get('department_id') == d.id|string }}>{{ d.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Branch</label>
+              <select class="form-select" name="branch_id">
+                <option value="">Select branch</option>
+                {% for b in branches %}
+                <option value="{{ b.id }}" {{ 'selected' if form.get('branch_id') == b.id|string }}>{{ b.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Password</label>
+              <input type="password" class="form-control" name="password" required minlength="8">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Confirm password</label>
+              <input type="password" class="form-control" name="confirm" required minlength="8">
+            </div>
+          </div>
+          <button class="btn btn-primary">Create account</button>
+        </form>
+        <p class="small mt-3 mb-0">Already registered? <a href="{{ url_for('auth.login') }}">Sign in</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
