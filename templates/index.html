@@ -1,41 +1,366 @@
 {% extends "base.html" %}
-{% block title %}Home{% endblock %}
+{% block title %}Home - Smart Student Leave Management{% endblock %}
 {% block content %}
-<div class="p-5 mb-4 bg-light rounded-3 hero">
-  <div class="container-fluid py-4">
-    <h1 class="display-6">Smart Student Leave Management &amp; Approval System</h1>
-    <p class="lead">A secure, paperless leave workflow for Malla Reddy University &mdash; from submission to final decision.</p>
-    <div class="d-flex gap-2 flex-wrap">
-      <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-lg">Sign In</a>
-      <a href="{{ url_for('auth.register') }}" class="btn btn-outline-primary btn-lg">Student Registration</a>
+
+<!-- Hero Section with University Branding -->
+<div class="hero-wrapper">
+  <div class="position-relative" style="z-index: 2;">
+    <div class="hero-kicker">
+      <i class="bi bi-patch-check-fill"></i> Malla Reddy University &bull; Official Digital Portal
+    </div>
+    <h1 class="hero-title">Smart Student Leave Management &amp; Approval System</h1>
+    <p class="hero-subtitle">
+      A secure, paperless leave workflow for Malla Reddy University &mdash; from submission through multi-tier approvals to final decision. Replacing manual paperwork with traceable, auditable digital records.
+    </p>
+
+    <div class="d-flex flex-wrap gap-3 align-items-center mb-4">
+      <a href="{{ url_for('auth.login') }}" class="btn btn-light btn-lg px-4 py-2 text-primary fw-bold rounded-pill shadow-sm">
+        <i class="bi bi-box-arrow-in-right me-2"></i>Sign In to Portal
+      </a>
+      <a href="{{ url_for('auth.register') }}" class="btn btn-outline-light btn-lg px-4 py-2 rounded-pill">
+        <i class="bi bi-person-plus-fill me-2"></i>Student Registration
+      </a>
+      <a href="#quick-tracker" class="btn btn-link text-white text-decoration-none fw-semibold">
+        <i class="bi bi-search me-1"></i>Track Leave Status &darr;
+      </a>
+    </div>
+
+    <!-- Live Metrics / Feature Badges -->
+    <div class="row g-3 pt-2">
+      <div class="col-6 col-md-3">
+        <div class="stat-chip">
+          <div class="stat-chip-num">100%</div>
+          <div class="stat-chip-label">Paperless Workflow</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-chip">
+          <div class="stat-chip-num">4 Roles</div>
+          <div class="stat-chip-label">Role-Based Access</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-chip">
+          <div class="stat-chip-num">2 Levels</div>
+          <div class="stat-chip-label">Faculty &amp; HOD Approvals</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-chip">
+          <div class="stat-chip-num">Instant</div>
+          <div class="stat-chip-label">Email &amp; In-App Alerts</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<div class="row g-4">
-  <div class="col-md-4">
-    <div class="card h-100">
-      <div class="card-body">
-        <h5 class="card-title">Students</h5>
-        <p class="card-text">Submit leave requests with dates, reason, contact details and documents. Track live status, respond to clarification requests, and watch your leave balance.</p>
+<!-- Quick Leave Tracking Bar -->
+<div id="quick-tracker" class="track-card mb-5">
+  <div class="row align-items-center g-3">
+    <div class="col-lg-5">
+      <div class="d-flex align-items-center gap-3">
+        <div class="d-inline-flex align-items-center justify-content-center bg-primary bg-opacity-25 text-primary rounded-circle p-3" style="width: 52px; height: 52px;">
+          <i class="bi bi-radar fs-4 text-info"></i>
+        </div>
+        <div>
+          <h4 class="fw-bold mb-1 text-white">Track Live Leave Request</h4>
+          <p class="text-white text-opacity-75 small mb-0">Check live status, review remarks, and decision timeline anytime.</p>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="col-md-4">
-    <div class="card h-100">
-      <div class="card-body">
-        <h5 class="card-title">Faculty &amp; HODs</h5>
-        <p class="card-text">Review department requests, request more information, approve or reject with remarks, and escalate approvals to the Head of Department.</p>
-      </div>
+    <div class="col-lg-7">
+      <form method="get" action="{{ url_for('main.track') }}" class="d-flex gap-2">
+        <input type="text" name="q" class="form-control track-input" placeholder="Enter Request ID (e.g. REQ-2026-0001) or Roll Number..." required>
+        <button class="btn btn-primary px-4 fw-semibold text-nowrap rounded-pill" type="submit">
+          <i class="bi bi-search me-1"></i> Track Now
+        </button>
+      </form>
     </div>
   </div>
-  <div class="col-md-4">
-    <div class="card h-100">
-      <div class="card-body">
-        <h5 class="card-title">Administrators</h5>
-        <p class="card-text">Manage users, departments, branches, leave types and holidays. Export reports to CSV and inspect the complete audit trail.</p>
+</div>
+
+<!-- User Roles Portals (Detailed Breakdown as per README) -->
+<div class="mb-5">
+  <div class="text-center mb-4">
+    <span class="section-tag">Role-Based Architecture</span>
+    <h2 class="section-title">Designed for Every Campus Stakeholder</h2>
+    <p class="section-desc mx-auto">
+      Each role operates in a dedicated workspace with tailored permissions, automated validations, and real-time audit logging.
+    </p>
+  </div>
+
+  <div class="row g-4">
+    <!-- Student Portal -->
+    <div class="col-md-6 col-lg-3">
+      <div class="role-card">
+        <div class="role-card-header">
+          <div class="role-icon-box icon-student">
+            <i class="bi bi-mortarboard"></i>
+          </div>
+          <div>
+            <span class="role-badge-tag bg-primary bg-opacity-10 text-primary">Applicant</span>
+            <h5 class="role-card-title">Student Portal</h5>
+          </div>
+        </div>
+        <ul class="role-feature-list">
+          <li><i class="bi bi-check2-circle"></i> Submit leave requests with dates, reason &amp; contact info.</li>
+          <li><i class="bi bi-check2-circle"></i> Upload medical &amp; academic supporting documents.</li>
+          <li><i class="bi bi-check2-circle"></i> Live status timeline &amp; faculty remarks tracking.</li>
+          <li><i class="bi bi-check2-circle"></i> Automatic leave quota balance deduction.</li>
+          <li><i class="bi bi-check2-circle"></i> Cancel pending requests before review.</li>
+        </ul>
+        <div class="pt-3 border-top mt-auto">
+          <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary w-100 rounded-pill btn-sm fw-bold">
+            Student Access &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Faculty Portal -->
+    <div class="col-md-6 col-lg-3">
+      <div class="role-card">
+        <div class="role-card-header">
+          <div class="role-icon-box icon-faculty">
+            <i class="bi bi-person-badge"></i>
+          </div>
+          <div>
+            <span class="role-badge-tag bg-purple bg-opacity-10 text-purple" style="background: #ede9fe; color: #6d28d9;">Reviewer</span>
+            <h5 class="role-card-title">Faculty In-charge</h5>
+          </div>
+        </div>
+        <ul class="role-feature-list">
+          <li><i class="bi bi-check2-circle"></i> Review departmental student leave queue.</li>
+          <li><i class="bi bi-check2-circle"></i> Inspect uploaded medical/academic attachments.</li>
+          <li><i class="bi bi-check2-circle"></i> Approve or reject with required remarks.</li>
+          <li><i class="bi bi-check2-circle"></i> Request additional clarification if needed.</li>
+          <li><i class="bi bi-check2-circle"></i> Auto-forward extended leaves to HOD.</li>
+        </ul>
+        <div class="pt-3 border-top mt-auto">
+          <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary w-100 rounded-pill btn-sm fw-bold">
+            Faculty Access &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOD Portal -->
+    <div class="col-md-6 col-lg-3">
+      <div class="role-card">
+        <div class="role-card-header">
+          <div class="role-icon-box icon-hod">
+            <i class="bi bi-building-check"></i>
+          </div>
+          <div>
+            <span class="role-badge-tag bg-warning bg-opacity-25 text-warning-emphasis">Authority</span>
+            <h5 class="role-card-title">Head of Dept</h5>
+          </div>
+        </div>
+        <ul class="role-feature-list">
+          <li><i class="bi bi-check2-circle"></i> Departmental oversight of student leave trends.</li>
+          <li><i class="bi bi-check2-circle"></i> Final sign-off on escalated multi-day requests.</li>
+          <li><i class="bi bi-check2-circle"></i> Mandatory review for medical exemption cases.</li>
+          <li><i class="bi bi-check2-circle"></i> Filter requests by branch, date range, and status.</li>
+          <li><i class="bi bi-check2-circle"></i> Add authoritative departmental remarks.</li>
+        </ul>
+        <div class="pt-3 border-top mt-auto">
+          <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary w-100 rounded-pill btn-sm fw-bold">
+            HOD Access &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Portal -->
+    <div class="col-md-6 col-lg-3">
+      <div class="role-card">
+        <div class="role-card-header">
+          <div class="role-icon-box icon-admin">
+            <i class="bi bi-shield-lock"></i>
+          </div>
+          <div>
+            <span class="role-badge-tag bg-danger bg-opacity-10 text-danger">Governance</span>
+            <h5 class="role-card-title">Administrator</h5>
+          </div>
+        </div>
+        <ul class="role-feature-list">
+          <li><i class="bi bi-check2-circle"></i> User provisioning for Students, Faculty &amp; HODs.</li>
+          <li><i class="bi bi-check2-circle"></i> Manage departments, branches &amp; holiday calendar.</li>
+          <li><i class="bi bi-check2-circle"></i> Configure leave types, max limits &amp; rules.</li>
+          <li><i class="bi bi-check2-circle"></i> Full audit logs for accountability &amp; compliance.</li>
+          <li><i class="bi bi-check2-circle"></i> Export filtered data to CSV for records.</li>
+        </ul>
+        <div class="pt-3 border-top mt-auto">
+          <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary w-100 rounded-pill btn-sm fw-bold">
+            Admin Access &rarr;
+          </a>
+        </div>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Workflow Stepper Section (Visualizing the 5 Steps from README) -->
+<div class="workflow-section">
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
+    <div>
+      <span class="section-tag">Traceable Digital Pipeline</span>
+      <h3 class="section-title mb-1">Standard University Approval Workflow</h3>
+      <p class="section-desc mb-0">From initial student application to final departmental decision and balance synchronization.</p>
+    </div>
+    <div class="mt-3 mt-md-0">
+      <span class="badge bg-primary px-3 py-2">5-Stage Structured Workflow</span>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-md-6 col-lg">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h6 class="step-card-title">Submission</h6>
+        <p class="step-card-desc">Student signs in, selects leave type, dates, reason, emergency contact, and attaches documents.</p>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg">
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h6 class="step-card-title">Validation</h6>
+        <p class="step-card-desc">System validates working days, holiday exclusions, quota balances, and detects overlapping leaves.</p>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg">
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h6 class="step-card-title">Faculty Review</h6>
+        <p class="step-card-desc">Class In-charge inspects details, marks approval, rejects with remarks, or requests more information.</p>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg">
+      <div class="step-card">
+        <div class="step-number">4</div>
+        <h6 class="step-card-title">HOD Escalation</h6>
+        <p class="step-card-desc">Medical leaves &amp; extended requests escalate to Head of Department for final institutional approval.</p>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg">
+      <div class="step-card">
+        <div class="step-number">5</div>
+        <h6 class="step-card-title">Decision &amp; Sync</h6>
+        <p class="step-card-desc">Student receives in-app/email alerts; balance is updated and record is logged in immutable audit trail.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Statuses Legend as defined in README -->
+  <div class="mt-4 pt-3 border-top">
+    <span class="text-muted small fw-semibold me-2">Supported Status Lifecycle:</span>
+    <span class="badge bg-secondary me-1">Draft</span>
+    <span class="badge bg-warning text-dark me-1"><i class="bi bi-hourglass-split me-1"></i>Pending</span>
+    <span class="badge bg-info text-dark me-1"><i class="bi bi-question-circle me-1"></i>More Information Required</span>
+    <span class="badge bg-success me-1"><i class="bi bi-check-circle me-1"></i>Approved</span>
+    <span class="badge bg-danger me-1"><i class="bi bi-x-circle me-1"></i>Rejected</span>
+    <span class="badge bg-secondary me-1">Cancelled</span>
+    <span class="badge bg-primary">Completed</span>
+  </div>
+</div>
+
+<!-- Leave Types & Institutional Policies -->
+<div class="row g-4 mb-5">
+  <div class="col-lg-7">
+    <div class="card h-100 shadow-sm border-0">
+      <div class="card-body p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <span class="section-tag">University Leave Categories</span>
+            <h4 class="fw-bold mb-0">Configured Leave Policies</h4>
+          </div>
+          <span class="badge bg-light text-dark border">Academic Year 2026-27</span>
+        </div>
+        <p class="text-muted small mb-4">Each leave type is governed by quota allocations, maximum consecutive duration, and verification rules.</p>
+
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="p-3 border rounded-3 bg-light h-100">
+              <span class="badge bg-primary mb-2">Casual Leave</span>
+              <h6 class="fw-bold mb-1">Short Personal Leave</h6>
+              <p class="small text-muted mb-2">Max 5 consecutive days. Standard quota of 12 days/year for urgent domestic needs.</p>
+              <div class="small fw-semibold text-primary"><i class="bi bi-shield-check me-1"></i>Faculty In-charge sign-off</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-3 border rounded-3 bg-light h-100">
+              <span class="badge bg-danger mb-2">Medical Leave</span>
+              <h6 class="fw-bold mb-1">Health &amp; Treatment</h6>
+              <p class="small text-muted mb-2">Max 15 days. Doctor certificate mandatory. Automatically escalates to HOD.</p>
+              <div class="small fw-semibold text-danger"><i class="bi bi-file-earmark-medical me-1"></i>Doc + HOD Required</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-3 border rounded-3 bg-light h-100">
+              <span class="badge bg-info text-dark mb-2">Academic Leave</span>
+              <h6 class="fw-bold mb-1">Conferences &amp; Events</h6>
+              <p class="small text-muted mb-2">Max 10 days. Competitions, symposiums, interviews, and official university representation.</p>
+              <div class="small fw-semibold text-info-emphasis"><i class="bi bi-award me-1"></i>Proof Required</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Demo Credentials Helper Card -->
+  <div class="col-lg-5" id="demo-accounts">
+    <div class="card h-100 shadow-sm border-0 bg-white">
+      <div class="card-body p-4">
+        <span class="section-tag">Evaluation &amp; Testing</span>
+        <h4 class="fw-bold mb-1">Ready Demo Accounts</h4>
+        <p class="text-muted small mb-3">Pre-seeded accounts from database seed. Click any role to access the login page.</p>
+
+        <div class="list-group list-group-flush mb-3">
+          <div class="list-group-item px-0 py-2 d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-primary me-2">Student</span>
+              <strong>A. Kumar</strong> (CSE - A)
+              <div class="small text-muted font-monospace">student1@university.edu</div>
+            </div>
+            <span class="badge bg-light text-dark border font-monospace">Student@123</span>
+          </div>
+
+          <div class="list-group-item px-0 py-2 d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-purple text-white me-2" style="background:#6d28d9;">Faculty</span>
+              <strong>Prof. Anitha Rao</strong> (CSE)
+              <div class="small text-muted font-monospace">faculty.cse@university.edu</div>
+            </div>
+            <span class="badge bg-light text-dark border font-monospace">Faculty@123</span>
+          </div>
+
+          <div class="list-group-item px-0 py-2 d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-warning text-dark me-2">HOD</span>
+              <strong>Dr. Suresh Babu</strong> (CSE)
+              <div class="small text-muted font-monospace">hod.cse@university.edu</div>
+            </div>
+            <span class="badge bg-light text-dark border font-monospace">Hod@12345</span>
+          </div>
+
+          <div class="list-group-item px-0 py-2 d-flex justify-content-between align-items-center">
+            <div>
+              <span class="badge bg-danger me-2">Admin</span>
+              <strong>System Admin</strong>
+              <div class="small text-muted font-monospace">admin@university.edu</div>
+            </div>
+            <span class="badge bg-light text-dark border font-monospace">Admin@1234</span>
+          </div>
+        </div>
+
+        <a href="{{ url_for('auth.login') }}" class="btn btn-primary w-100 rounded-pill fw-semibold">
+          <i class="bi bi-box-arrow-in-right me-1"></i> Proceed to Login Page
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock %}
