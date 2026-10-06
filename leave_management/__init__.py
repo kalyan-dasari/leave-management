@@ -80,5 +80,6 @@ def create_app(test_config=None):
     app.register_blueprint(review.bp)
     app.register_blueprint(admin_views.bp)
 
-    logging.basicConfig(level=logging.INFO)
+    if not app.config.get("TESTING"):
+        logging.basicConfig(level=logging.INFO)
     return app

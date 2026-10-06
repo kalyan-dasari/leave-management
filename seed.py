@@ -177,9 +177,11 @@ def main():
         get_db()
         accounts = seed_demo()
     print("Seed complete.")
-    for label, (email, password) in accounts.items():
-        if label != "ids":
-            print(f"  {label:10s} {email:32s} {password}")
+    for label, value in accounts.items():
+        if label == "ids":
+            continue
+        email, password = value
+        print(f"  {label:12s} {email:32s} {password}")
 
 
 if __name__ == "__main__":
