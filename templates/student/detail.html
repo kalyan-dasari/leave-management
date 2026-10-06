@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% from "_macros.html" import status_badge %}
+{% block title %}{{ leave.request_no }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+  <div>
+    <h3 class="mb-0 font-monospace">{{ leave.request_no }}</h3>
+    <span class="text-muted small">Submitted {{ leave.created_at }} &middot; last updated {{ leave.updated_at }}</span>
+  </div>
+  <div>{{ status_badge(leave.status) }}
+    {% if leave.status == 'Pending' and leave.current_level == 2 %}
+    <span class="badge bg-secondary">Level {{ leave.current_level }} (HOD)</span>
+    {% endif %}
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-7">
+    <div class="card mb-3">
+      <div class="card-header">Request details</div>
+      <div class="card-body">
+        <dl class="row mb-0">
+          <dt class="col-sm-4">Leave type</dt><dd class="col-sm-8">{{ leave.leave_type_name }}</dd>
+          <dt class="col-sm-4">Dates</dt><dd class="col-sm-8">{{ leave.start_date }} &rarr; {{ leave.end_date }}</dd>
+          <dt class="col-sm-4">Reason</dt><dd class="col-sm-8">{{ leave.reason }}</dd>
+          <dt class="col-sm-4">Contact</dt><dd class="col-sm-8">{{ leave.contact_info }}</dd>
+          <dt class="col-sm-4">Attachment</dt>
+          <dd class="col-sm-8">
+            {% if leave.attachment_path %}
+              <a href="{{ url_for('student.attachment', request_id=leave.id) }}">Download document</a>
+            {% else %}<span class="text-muted">None</span>{% endif %}
+          </dd>
+          <dt class="col-sm-4">Department</dt><dd class="col-sm-8">{{ leave.department_name or '-' }} {{ leave.branch_name }}</dd>
+        </dl>
+      </div>
+    </div>
+
+    {% if leave.status == 'More Information Required' %}
+    <div class="card mb-3 border-info">
+      <div class="card-header bg-info-subtle">Information required by reviewer</div>
+      <div class="card-body">
+        <form method="post" action="{{ url_for('student.respond', request_id=leave.id) }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <label class="form-label">Your response</label>
+          <textarea class="form-control mb-2" name="response" rows="3" required minlength="5"
+                    placeholder="Provide the requested information"></textarea>
+          <button class="btn btn-primary btn-sm">Submit response</button>
+        </form>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if leave.status in ('Pending', 'More Information Required', 'Draft') %}
+    <form method="post" action="{{ url_for('student.cancel', request_id=leave.id) }}"
+          onsubmit="return confirm('Cancel this leave request?');">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button class="btn btn-outline-danger btn-sm">Cancel request</button>
+    </form>
+    {% endif %}
+  </div>
+
+  <div class="col-lg-5">
+    <div class="card">
+      <div class="card-header">Status timeline</div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <div class="fw-semibold">Submitted</div>
+          <div class="small text-muted">{{ leave.created_at }} by {{ leave.student_name }}</div>
+        </li>
+        {% for item in timeline %}
+        <li class="list-group-item">
+          <div class="fw-semibold">{{ item.action }}
+            {% if item.level > 1 %}<span class="badge bg-secondary">Level {{ item.level }}</span>{% endif %}
+          </div>
+          <div class="small text-muted">{{ item.action_time }} &middot; {{ item.reviewer_name }} ({{ item.reviewer_role }})</div>
+          {% if item.remarks %}<div class="small fst-italic">"{{ item.remarks }}"</div>{% endif %}
+        </li>
+        {% endfor %}
+        {% if leave.status in ('Pending', 'More Information Required') %}
+        <li class="list-group-item text-muted small">
+          Awaiting decision at level {{ leave.current_level }}...
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<a href="{{ url_for('student.dashboard') }}" class="btn btn-outline-secondary btn-sm mt-3">&larr; Back to dashboard</a>
+{% endblock %}
