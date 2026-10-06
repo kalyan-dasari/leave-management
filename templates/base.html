@@ -15,10 +15,14 @@
 <body>
 <nav class="navbar navbar-expand-lg mru-navbar no-print">
   <div class="container">
-    <a class="navbar-brand mru-brand-title" href="{{ url_for('main.dashboard') }}">
-      <img src="{{ url_for('static', filename='images/mru-logo.png') }}" alt="MRU Logo" class="bg-white rounded-circle p-1 shadow-sm" style="height: 38px; width: 38px; object-fit: contain;">
-      <span>MRU Leave Portal</span>
-      <span class="mru-brand-badge d-none d-sm-inline-block">Malla Reddy University</span>
+    <a class="navbar-brand mru-brand-title d-flex align-items-center gap-2" href="{{ url_for('main.dashboard') }}">
+      <div class="bg-white rounded-3 px-2 py-1 shadow-sm d-flex align-items-center justify-content-center border border-white border-opacity-50" style="height: 44px;">
+        <img src="{{ url_for('static', filename='images/mru-logo.png') }}" alt="Malla Reddy University" style="height: 36px; width: auto; object-fit: contain;">
+      </div>
+      <div class="d-flex flex-column">
+        <span class="fw-bold fs-5 text-white" style="letter-spacing: -0.01em; line-height: 1.15;">MRU Leave Portal</span>
+        <span class="text-warning small" style="font-size: 0.72rem; font-weight: 600;">Malla Reddy University</span>
+      </div>
     </a>
     <button class="navbar-toggler border-white border-opacity-25 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
       <i class="bi bi-list fs-4"></i>
