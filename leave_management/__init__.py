@@ -16,7 +16,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 def create_app(test_config=None):
     load_dotenv(BASE_DIR / ".env")
 
-    app = Flask(__name__, static_folder="static", template_folder=str(BASE_DIR / "templates"))
+    app = Flask(__name__, static_folder=str(BASE_DIR / "static"), template_folder=str(BASE_DIR / "templates"))
     app.config.from_mapping(
         SECRET_KEY=os.environ.get("SECRET_KEY") or secrets.token_hex(32),
         DATABASE=os.environ.get("DATABASE_PATH") or str(BASE_DIR / "leaves.db"),
