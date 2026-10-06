@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Apply for Leave{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <h3 class="mb-3">Apply for leave</h3>
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <form method="post" enctype="multipart/form-data">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Leave type *</label>
+              <select class="form-select" name="leave_type_id" required>
+                <option value="">Select leave type</option>
+                {% for t in leave_types %}
+                <option value="{{ t.id }}" data-requires-doc="{{ t.requires_document }}"
+                        {{ 'selected' if form.get('leave_type_id') == t.id|string }}>{{ t.name }} (max {{ t.max_days }} days)</option>
+                {% endfor %}
+              </select>
+              <div class="form-text" id="type-help"></div>
+            </div>
+            <div class="col-md-3 mb-3">
+              <label class="form-label">Start date *</label>
+              <input type="date" class="form-control" name="start_date" min="{{ today }}"
+                     value="{{ form.get('start_date', '') }}" required>
+            </div>
+            <div class="col-md-3 mb-3">
+              <label class="form-label">End date *</label>
+              <input type="date" class="form-control" name="end_date" min="{{ today }}"
+                     value="{{ form.get('end_date', '') }}" required>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Reason * <span class="text-muted small">(min 10 characters)</span></label>
+            <textarea class="form-control" name="reason" rows="4" minlength="10" required>{{ form.get('reason', '') }}</textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Emergency contact *</label>
+            <input type="text" class="form-control" name="contact_info" placeholder="Phone number or guardian contact"
+                   value="{{ form.get('contact_info', '') }}" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Supporting document <span class="text-muted small">(PDF, JPG or PNG, max 5 MB)</span></label>
+            <input type="file" class="form-control" name="attachment" accept=".pdf,.jpg,.jpeg,.png">
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-primary">Submit request</button>
+            <a href="{{ url_for('student.dashboard') }}" class="btn btn-outline-secondary">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="alert alert-light border mt-3 small">
+      Requests are validated for date ranges, overlapping requests, holidays and your remaining leave balance,
+      then routed to your department faculty (and Head of Department when required).
+    </div>
+  </div>
+</div>
+{% endblock %}
