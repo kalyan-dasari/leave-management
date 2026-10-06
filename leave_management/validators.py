@@ -100,7 +100,20 @@ def validate_leave(*, student_id, leave_type, start_raw, end_raw, reason, contac
         (student_id, leave_type["id"], year),
         one=True,
     )
-    remaining = balance["remaining"] if balance else 0
+    if not balance:
+        try:
+            from .db import execute
+            execute(
+                """INSERT INTO leave_balances (student_id, leave_type_id, academic_year, allocated, used, remaining)
+                   VALUES (?, ?, ?, 5, 0, 5)""",
+                (student_id, leave_type["id"], year),
+            )
+            remaining = 5
+        except Exception:
+            remaining = 5
+    else:
+        remaining = balance["remaining"]
+
     if remaining < days:
         errors.append(
             f"Insufficient {leave_type['name']} leave balance: {remaining} day(s) left, {days} requested."

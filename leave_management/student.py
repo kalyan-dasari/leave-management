@@ -18,13 +18,31 @@ from werkzeug.utils import secure_filename
 from .audit import audit
 from .db import execute, query, utcnow
 from .security import login_required, roles_required
-from .validators import load_holiday_dates, page_number, parse_date, validate_leave, working_days
+from .validators import academic_year, load_holiday_dates, page_number, parse_date, validate_leave, working_days
 from .workflow import cancel_request, create_leave_request, finalize_completed, respond_to_request
 
 bp = Blueprint("student", __name__, url_prefix="/student")
 
 ALLOWED_EXTENSIONS = {".pdf", ".jpg", ".jpeg", ".png"}
 MAX_ATTACHMENT_BYTES = 5 * 1024 * 1024
+
+
+def _ensure_student_balances(student_id):
+    year = academic_year(date.today())
+    active_types = query("SELECT id FROM leave_types WHERE active = 1")
+    for lt in active_types:
+        row = query(
+            "SELECT id FROM leave_balances WHERE student_id = ? AND leave_type_id = ? AND academic_year = ?",
+            (student_id, lt["id"], year),
+            one=True,
+        )
+        if not row:
+            execute(
+                """INSERT INTO leave_balances (student_id, leave_type_id, academic_year, allocated, used, remaining)
+                   VALUES (?, ?, ?, 5, 0, 5)""",
+                (student_id, lt["id"], year),
+            )
+
 
 
 def _save_attachment(file):
@@ -95,6 +113,7 @@ def dashboard():
             (student_id,),
         )
     }
+    _ensure_student_balances(student_id)
     balances = query(
         """SELECT b.*, t.name AS leave_type_name FROM leave_balances b
            JOIN leave_types t ON t.id = b.leave_type_id
