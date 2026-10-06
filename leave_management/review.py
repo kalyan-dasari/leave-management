@@ -1,4 +1,4 @@
-from flask import Blueprint, current_app, flash, g, redirect, render_template, request, url_for
+from flask import Blueprint, current_app, flash, g, redirect, render_template, request, send_from_directory, url_for
 
 from .audit import audit
 from .db import query
@@ -129,6 +129,15 @@ def detail(request_id):
         and leave["current_level"] in _allowed_levels()
     )
     return render_template("review/detail.html", leave=leave, timeline=timeline, can_decide=can_decide)
+
+
+@bp.route("/attachments/<int:request_id>")
+@roles_required(*REVIEW_ROLES)
+def attachment(request_id):
+    leave = _load_request(request_id)
+    if leave is None or not leave["attachment_path"]:
+        return render_template("errors/404.html"), 404
+    return send_from_directory(current_app.config["UPLOAD_FOLDER"], leave["attachment_path"], as_attachment=True)
 
 
 @bp.route("/requests/<int:request_id>/decision", methods=["POST"])

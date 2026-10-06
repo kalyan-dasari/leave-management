@@ -39,7 +39,7 @@
           <dt class="col-sm-4">Attachment</dt>
           <dd class="col-sm-8">
             {% if leave.attachment_path %}
-              <a href="{{ url_for('student.attachment', request_id=leave.id) }}">Download document</a>
+              <a href="{{ url_for('review.attachment', request_id=leave.id) }}">Download document</a>
             {% else %}<span class="text-muted">None provided</span>{% endif %}
           </dd>
         </dl>
