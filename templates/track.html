@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block title %}Track Leave Request{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card shadow-sm border-0 mb-4">
+      <div class="card-body p-4 p-md-5">
+        <div class="text-center mb-4">
+          <div class="d-inline-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary rounded-circle p-3 mb-3" style="width: 64px; height: 64px;">
+            <i class="bi bi-search fs-2"></i>
+          </div>
+          <h2 class="fw-bold">Track Leave Request Status</h2>
+          <p class="text-muted">Enter your Request Number (e.g., <code>REQ-2026-0001</code>), registered Student Email, or Roll Number to check live approval progress.</p>
+        </div>
+
+        <form method="get" action="{{ url_for('main.track') }}" class="mb-4">
+          <div class="input-group input-group-lg shadow-sm">
+            <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-hash"></i></span>
+            <input type="text" name="q" value="{{ q or '' }}" class="form-control border-start-0" placeholder="e.g. REQ-2026-0001 or 22B81A0501" required autofocus>
+            <button class="btn btn-primary px-4 fw-semibold" type="submit">
+              <i class="bi bi-arrow-right me-1"></i> Check Status
+            </button>
+          </div>
+        </form>
+
+        {% if error %}
+          <div class="alert alert-warning border-0 shadow-sm rounded-3 d-flex align-items-center gap-2 mb-4">
+            <i class="bi bi-exclamation-triangle-fill fs-5"></i>
+            <div>{{ error }}</div>
+          </div>
+        {% endif %}
+
+        {% if leave %}
+          <div class="border rounded-3 p-4 bg-light shadow-sm">
+            <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-3 pb-3 border-bottom">
+              <div>
+                <span class="text-muted small text-uppercase fw-bold">Request Identifier</span>
+                <h4 class="fw-bold text-primary mb-0">{{ leave.request_no }}</h4>
+              </div>
+              <div class="text-end">
+                <span class="text-muted small d-block">Current Status</span>
+                {% if leave.status == 'Pending' %}
+                  <span class="badge bg-warning text-dark fs-6 px-3 py-2"><i class="bi bi-hourglass-split me-1"></i>Pending Review</span>
+                {% elif leave.status == 'Approved' %}
+                  <span class="badge bg-success fs-6 px-3 py-2"><i class="bi bi-check-circle-fill me-1"></i>Approved</span>
+                {% elif leave.status == 'Rejected' %}
+                  <span class="badge bg-danger fs-6 px-3 py-2"><i class="bi bi-x-circle-fill me-1"></i>Rejected</span>
+                {% elif leave.status == 'More Information Required' %}
+                  <span class="badge bg-info text-dark fs-6 px-3 py-2"><i class="bi bi-question-circle-fill me-1"></i>Clarification Required</span>
+                {% elif leave.status == 'Completed' %}
+                  <span class="badge bg-primary fs-6 px-3 py-2"><i class="bi bi-calendar-check me-1"></i>Completed</span>
+                {% else %}
+                  <span class="badge bg-secondary fs-6 px-3 py-2">{{ leave.status }}</span>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="row g-3 mb-4">
+              <div class="col-sm-6 col-md-3">
+                <span class="text-muted small d-block">Student Name</span>
+                <span class="fw-semibold">{{ leave.student_name }}</span>
+              </div>
+              <div class="col-sm-6 col-md-3">
+                <span class="text-muted small d-block">Roll Number</span>
+                <span class="fw-semibold font-monospace">{{ leave.roll_no or 'N/A' }}</span>
+              </div>
+              <div class="col-sm-6 col-md-3">
+                <span class="text-muted small d-block">Department / Branch</span>
+                <span class="fw-semibold">{{ leave.dept_name or 'N/A' }} {% if leave.branch_name %}({{ leave.branch_name }}){% endif %}</span>
+              </div>
+              <div class="col-sm-6 col-md-3">
+                <span class="text-muted small d-block">Leave Category</span>
+                <span class="badge bg-light text-dark border">{{ leave.leave_type_name }}</span>
+              </div>
+              <div class="col-sm-6 col-md-6">
+                <span class="text-muted small d-block">Duration Dates</span>
+                <span class="fw-semibold"><i class="bi bi-calendar-range me-1 text-primary"></i> {{ leave.start_date }} to {{ leave.end_date }}</span>
+              </div>
+              <div class="col-sm-6 col-md-6">
+                <span class="text-muted small d-block">Current Review Level</span>
+                <span class="badge bg-secondary">
+                  {% if leave.current_level == 1 %}Level 1: Faculty / In-charge
+                  {% elif leave.current_level == 2 %}Level 2: Head of Department (HOD)
+                  {% else %}Final Decision Completed{% endif %}
+                </span>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <span class="text-muted small d-block mb-1">Reason for Leave</span>
+              <div class="p-3 bg-white border rounded text-secondary">{{ leave.reason }}</div>
+            </div>
+
+            <h5 class="fw-bold mb-3"><i class="bi bi-clock-history me-2 text-primary"></i>Approval Trail &amp; Decisions</h5>
+            {% if timeline %}
+              <div class="timeline mt-3">
+                {% for action in timeline %}
+                  <div class="timeline-item">
+                    <div class="timeline-dot {% if action.action == 'Approved' %}approved{% elif action.action == 'Rejected' %}rejected{% else %}pending{% endif %}"></div>
+                    <div class="bg-white p-3 border rounded shadow-sm">
+                      <div class="d-flex justify-content-between align-items-center mb-1">
+                        <strong>{{ action.action }} by {{ action.reviewer_name }} ({{ action.reviewer_role|upper }})</strong>
+                        <span class="text-muted small">{{ action.action_at }}</span>
+                      </div>
+                      {% if action.remarks %}
+                        <p class="mb-0 text-muted small"><i class="bi bi-chat-left-quote me-1"></i> Remarks: "{{ action.remarks }}"</p>
+                      {% endif %}
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            {% else %}
+              <div class="text-muted small p-3 bg-white border rounded">
+                <i class="bi bi-hourglass-split me-1 text-warning"></i> This request is currently awaiting reviewer review.
+              </div>
+            {% endif %}
+
+            <div class="mt-4 pt-3 border-top text-end">
+              <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary btn-sm">
+                <i class="bi bi-box-arrow-in-right me-1"></i> Sign in to view full student portal
+              </a>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
