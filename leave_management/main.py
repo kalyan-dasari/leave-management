@@ -50,7 +50,7 @@ def track():
                    FROM approvals a
                    JOIN users u ON u.id = a.reviewer_id
                    WHERE a.request_id = ?
-                   ORDER BY a.action_at ASC""",
+                   ORDER BY a.action_time ASC""",
                 (leave_data["id"],),
             )
         else:

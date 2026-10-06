@@ -100,7 +100,7 @@
                     <div class="bg-white p-3 border rounded shadow-sm">
                       <div class="d-flex justify-content-between align-items-center mb-1">
                         <strong>{{ action.action }} by {{ action.reviewer_name }} ({{ action.reviewer_role|upper }})</strong>
-                        <span class="text-muted small">{{ action.action_at }}</span>
+                        <span class="text-muted small">{{ action.action_time }}</span>
                       </div>
                       {% if action.remarks %}
                         <p class="mb-0 text-muted small"><i class="bi bi-chat-left-quote me-1"></i> Remarks: "{{ action.remarks }}"</p>
