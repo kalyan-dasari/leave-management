@@ -6,11 +6,11 @@
     <div class="card shadow-sm border-0 mb-4">
       <div class="card-body p-4 p-md-5">
         <div class="text-center mb-4">
-          <div class="d-inline-flex align-items-center justify-content-center bg-white p-2 rounded-circle shadow-sm mb-3 border" style="width: 72px; height: 72px;">
-            <img src="{{ url_for('static', filename='images/mru-logo.png') }}" alt="MRU Logo" style="max-height: 54px; max-width: 54px; object-fit: contain;">
+          <div class="d-inline-flex align-items-center justify-content-center bg-white px-3 py-2 rounded-3 shadow-sm mb-3 border" style="height: 70px; width: 100px;">
+            <img src="{{ url_for('static', filename='images/mru-logo.png') }}" alt="Malla Reddy University" style="max-height: 56px; max-width: 86px; object-fit: contain;">
           </div>
           <h2 class="fw-bold">Track Leave Request Status</h2>
-          <p class="text-muted">Enter your Request Number (e.g., <code>REQ-2026-0001</code>), registered Student Email, or Roll Number to check live approval progress.</p>
+          <p class="text-muted">Malla Reddy University &bull; Live Student Leave Request Tracker</p>
         </div>
 
         <form method="get" action="{{ url_for('main.track') }}" class="mb-4">
