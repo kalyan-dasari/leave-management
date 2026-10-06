@@ -94,8 +94,8 @@ def seed_demo(db=None):
         ).lastrowid
 
     casual = leave_type("Casual Leave", "Short personal leave", 5)
-    medical = leave_type("Medical Leave", "Illness or medical treatment", 15, requires_document=1, hod_required=1)
-    academic = leave_type("Academic Leave", "Exams, interviews, conferences", 10, requires_document=1)
+    medical = leave_type("Medical Leave", "Illness or medical treatment", 15, requires_document=0, hod_required=1)
+    academic = leave_type("Academic Leave", "Exams, interviews, conferences", 10, requires_document=0)
 
     # balances for the current academic year
     year = academic_year(date.today())
