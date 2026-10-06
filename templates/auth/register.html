@@ -3,28 +3,37 @@
 {% block content %}
 <div class="row justify-content-center">
   <div class="col-md-8 col-lg-6">
-    <div class="card shadow-sm">
-      <div class="card-body p-4">
-        <h4 class="mb-4">Student registration</h4>
+    <div class="card shadow-sm border-0">
+      <div class="card-body p-4 p-md-5">
+        <div class="text-center mb-4">
+          <div class="d-inline-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary rounded-circle mb-3" style="width: 56px; height: 56px;">
+            <i class="bi bi-person-plus-fill fs-3"></i>
+          </div>
+          <h3 class="fw-bold mb-1">Student Registration</h3>
+          <p class="text-muted small">Create your Malla Reddy University student leave management account</p>
+        </div>
+
         <form method="post">
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label class="form-label">Full name</label>
-              <input type="text" class="form-control" name="name" value="{{ form.get('name', '') }}" required minlength="3">
+              <label class="form-label fw-semibold small">Full Name</label>
+              <input type="text" class="form-control" name="name" value="{{ form.get('name', '') }}" placeholder="e.g. A. Kumar" required minlength="3">
             </div>
             <div class="col-md-6 mb-3">
-              <label class="form-label">Roll number</label>
-              <input type="text" class="form-control" name="roll_no" value="{{ form.get('roll_no', '') }}" required>
+              <label class="form-label fw-semibold small">Roll Number</label>
+              <input type="text" class="form-control" name="roll_no" value="{{ form.get('roll_no', '') }}" placeholder="e.g. 22B81A0501" required>
             </div>
           </div>
+
           <div class="mb-3">
-            <label class="form-label">Email</label>
-            <input type="email" class="form-control" name="email" value="{{ form.get('email', '') }}" required>
+            <label class="form-label fw-semibold small">University Email</label>
+            <input type="email" class="form-control" name="email" value="{{ form.get('email', '') }}" placeholder="student@university.edu" required>
           </div>
+
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label class="form-label">Department</label>
+              <label class="form-label fw-semibold small">Department</label>
               <select class="form-select" name="department_id" required>
                 <option value="">Select department</option>
                 {% for d in departments %}
@@ -33,7 +42,7 @@
               </select>
             </div>
             <div class="col-md-6 mb-3">
-              <label class="form-label">Branch</label>
+              <label class="form-label fw-semibold small">Branch / Section</label>
               <select class="form-select" name="branch_id">
                 <option value="">Select branch</option>
                 {% for b in branches %}
@@ -42,19 +51,26 @@
               </select>
             </div>
           </div>
+
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label class="form-label">Password</label>
-              <input type="password" class="form-control" name="password" required minlength="8">
+              <label class="form-label fw-semibold small">Password</label>
+              <input type="password" class="form-control" name="password" placeholder="At least 8 chars" required minlength="8">
             </div>
             <div class="col-md-6 mb-3">
-              <label class="form-label">Confirm password</label>
-              <input type="password" class="form-control" name="confirm" required minlength="8">
+              <label class="form-label fw-semibold small">Confirm Password</label>
+              <input type="password" class="form-control" name="confirm" placeholder="Repeat password" required minlength="8">
             </div>
           </div>
-          <button class="btn btn-primary">Create account</button>
+
+          <button class="btn btn-primary w-100 py-2 rounded-pill fw-semibold shadow-sm mt-2" type="submit">
+            <i class="bi bi-person-check-fill me-1"></i> Register Student Account
+          </button>
         </form>
-        <p class="small mt-3 mb-0">Already registered? <a href="{{ url_for('auth.login') }}">Sign in</a></p>
+
+        <div class="mt-4 pt-3 border-top text-center">
+          <p class="small text-muted mb-0">Already registered? <a href="{{ url_for('auth.login') }}" class="fw-semibold text-decoration-none">Sign in here</a></p>
+        </div>
       </div>
     </div>
   </div>
