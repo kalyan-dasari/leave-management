@@ -2,25 +2,72 @@
 {% block title %}Sign In{% endblock %}
 {% block content %}
 <div class="row justify-content-center">
-  <div class="col-md-5 col-lg-4">
-    <div class="card shadow-sm">
-      <div class="card-body p-4">
-        <h4 class="mb-4">Sign in</h4>
-        <form method="post">
+  <div class="col-md-6 col-lg-5">
+    <div class="card shadow-sm border-0">
+      <div class="card-body p-4 p-md-5">
+        <div class="text-center mb-4">
+          <div class="d-inline-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary rounded-circle mb-3" style="width: 56px; height: 56px;">
+            <i class="bi bi-shield-lock-fill fs-3"></i>
+          </div>
+          <h3 class="fw-bold mb-1">Portal Sign In</h3>
+          <p class="text-muted small">Enter your credentials to access your university role dashboard</p>
+        </div>
+
+        <!-- Quick Demo Switcher -->
+        <div class="mb-4 p-3 bg-light rounded-3 border">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="small fw-bold text-muted text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.05em;">Quick Demo Fill</span>
+            <span class="badge bg-secondary-subtle text-secondary" style="font-size: 0.68rem;">Click to Autofill</span>
+          </div>
+          <div class="d-flex flex-wrap gap-2">
+            <button type="button" class="btn btn-demo-pill" onclick="fillCreds('student1@university.edu', 'Student@123')">
+              <i class="bi bi-mortarboard-fill text-primary"></i> Student
+            </button>
+            <button type="button" class="btn btn-demo-pill" onclick="fillCreds('faculty.cse@university.edu', 'Faculty@123')">
+              <i class="bi bi-person-badge-fill text-info"></i> Faculty
+            </button>
+            <button type="button" class="btn btn-demo-pill" onclick="fillCreds('hod.cse@university.edu', 'Hod@12345')">
+              <i class="bi bi-building-fill text-warning"></i> HOD
+            </button>
+            <button type="button" class="btn btn-demo-pill" onclick="fillCreds('admin@university.edu', 'Admin@1234')">
+              <i class="bi bi-shield-fill text-danger"></i> Admin
+            </button>
+          </div>
+        </div>
+
+        <form method="post" id="loginForm">
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
           <div class="mb-3">
-            <label class="form-label" for="email">Email</label>
-            <input type="email" class="form-control" id="email" name="email" required autofocus>
+            <label class="form-label fw-semibold small" for="email">University Email</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light text-muted"><i class="bi bi-envelope"></i></span>
+              <input type="email" class="form-control" id="email" name="email" placeholder="name@university.edu" required autofocus>
+            </div>
           </div>
-          <div class="mb-3">
-            <label class="form-label" for="password">Password</label>
-            <input type="password" class="form-control" id="password" name="password" required>
+          <div class="mb-4">
+            <label class="form-label fw-semibold small" for="password">Password</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light text-muted"><i class="bi bi-key"></i></span>
+              <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
+            </div>
           </div>
-          <button class="btn btn-primary w-100">Sign in</button>
+          <button class="btn btn-primary w-100 py-2 rounded-pill fw-semibold shadow-sm" type="submit">
+            <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
+          </button>
         </form>
-        <p class="small mt-3 mb-0">No account? <a href="{{ url_for('auth.register') }}">Register as a student</a></p>
+
+        <div class="mt-4 pt-3 border-top text-center">
+          <p class="small text-muted mb-0">New student? <a href="{{ url_for('auth.register') }}" class="fw-semibold text-decoration-none">Create a student account</a></p>
+        </div>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+function fillCreds(email, password) {
+  document.getElementById('email').value = email;
+  document.getElementById('password').value = password;
+}
+</script>
 {% endblock %}
