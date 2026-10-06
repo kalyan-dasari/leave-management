@@ -71,8 +71,22 @@ def register():
                VALUES (?, ?, ?, ?, 'student', ?, ?, 1, ?)""",
             (name, roll_no, email, generate_password_hash(password), department_id, branch_id, utcnow()),
         )
-        audit(cur.lastrowid, "register", "users", cur.lastrowid)
-        flash("Account created. Please sign in.", "success")
+        student_id = cur.lastrowid
+        audit(student_id, "register", "users", student_id)
+
+        # Allocate 5 days of leave balance per registration for all active leave types
+        from datetime import date
+        from .validators import academic_year
+        year = academic_year(date.today())
+        active_types = query("SELECT id FROM leave_types WHERE active = 1")
+        for lt in active_types:
+            execute(
+                """INSERT INTO leave_balances (student_id, leave_type_id, academic_year, allocated, used, remaining)
+                   VALUES (?, ?, ?, 5, 0, 5)""",
+                (student_id, lt["id"], year),
+            )
+
+        flash("Account created with 5 days allocated leave balances. Please sign in.", "success")
         return redirect(url_for("auth.login"))
     return render_template("auth/register.html", departments=departments, branches=branches, form={})
 
