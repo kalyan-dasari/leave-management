@@ -1,0 +1,58 @@
+body {
+  background-color: #f7f8fa;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+.hero {
+  background: linear-gradient(120deg, #0d6efd22, #0d6efd08);
+  border: 1px solid #0d6efd33;
+}
+
+.card {
+  border-radius: 0.6rem;
+}
+
+.table > :not(caption) > * > * {
+  padding: 0.6rem 0.75rem;
+}
+
+.font-monospace {
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 767.98px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+  }
+
+  .table-responsive {
+    font-size: 0.9rem;
+  }
+
+  .btn {
+    min-height: 2.5rem;
+  }
+}
+
+@media print {
+  .no-print,
+  .navbar,
+  footer {
+    display: none !important;
+  }
+
+  body {
+    background: #fff;
+  }
+}
