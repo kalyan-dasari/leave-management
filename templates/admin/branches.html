@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Branches{% endblock %}
+{% block content %}
+<h3 class="mb-3">Branches</h3>
+<div class="row g-3">
+  <div class="col-lg-7">
+    <table class="table table-hover align-middle">
+      <thead class="table-light"><tr><th>Name</th><th>Code</th><th>Department</th><th>Active</th><th></th></tr></thead>
+      <tbody>
+        {% for b in branches %}
+        <tr class="{{ '' if b.active else 'table-secondary' }}">
+          <td>{{ b.name }}</td>
+          <td class="font-monospace">{{ b.code }}</td>
+          <td>{{ b.department_name }}</td>
+          <td>{{ 'Yes' if b.active else 'No' }}</td>
+          <td class="text-end">
+            <form method="post" action="{{ url_for('admin.toggle_branch', branch_id=b.id) }}" class="d-inline">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="btn btn-sm {{ 'btn-outline-danger' if b.active else 'btn-outline-success' }}">
+                {{ 'Deactivate' if b.active else 'Activate' }}
+              </button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="col-lg-5">
+    <div class="card">
+      <div class="card-header">Add branch</div>
+      <div class="card-body">
+        <form method="post">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <div class="mb-2"><label class="form-label small">Name</label>
+            <input class="form-control form-control-sm" name="name" required></div>
+          <div class="mb-2"><label class="form-label small">Code</label>
+            <input class="form-control form-control-sm" name="code" required></div>
+          <div class="mb-2"><label class="form-label small">Department</label>
+            <select class="form-select form-select-sm" name="department_id" required>
+              {% for d in departments %}<option value="{{ d.id }}">{{ d.name }}</option>{% endfor %}
+            </select></div>
+          <button class="btn btn-primary btn-sm">Create</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

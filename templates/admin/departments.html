@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Departments{% endblock %}
+{% block content %}
+<h3 class="mb-3">Departments</h3>
+<div class="row g-3">
+  <div class="col-lg-7">
+    <table class="table table-hover align-middle">
+      <thead class="table-light"><tr><th>Name</th><th>Code</th><th>Members</th><th>Active</th><th></th></tr></thead>
+      <tbody>
+        {% for d in departments %}
+        <tr class="{{ '' if d.active else 'table-secondary' }}">
+          <td>{{ d.name }}</td>
+          <td class="font-monospace">{{ d.code }}</td>
+          <td>{{ d.members }}</td>
+          <td>{{ 'Yes' if d.active else 'No' }}</td>
+          <td class="text-end">
+            <form method="post" action="{{ url_for('admin.toggle_department', dept_id=d.id) }}" class="d-inline">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="btn btn-sm {{ 'btn-outline-danger' if d.active else 'btn-outline-success' }}">
+                {{ 'Deactivate' if d.active else 'Activate' }}
+              </button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="col-lg-5">
+    <div class="card">
+      <div class="card-header">Add department</div>
+      <div class="card-body">
+        <form method="post">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <div class="mb-2"><label class="form-label small">Name</label>
+            <input class="form-control form-control-sm" name="name" required></div>
+          <div class="mb-2"><label class="form-label small">Code</label>
+            <input class="form-control form-control-sm" name="code" required></div>
+          <button class="btn btn-primary btn-sm">Create</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
