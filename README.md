@@ -123,18 +123,131 @@ The prototype still needs the role-based accounts, multi-step approval workflow,
 8. Improve the UI for mobile and desktop, including accessible forms, clear status badges, and useful empty/error states.
 9. Add tests, seed data, deployment configuration, and documentation for local setup and production deployment.
 
-## Local Setup
+## Local Development Setup
 
-```powershell
+Follow these instructions to run the application locally on your machine after cloning the repository.
+
+### 1. Prerequisites
+
+- **Python**: Version 3.10 or higher installed.
+- **Git**: Installed on your system.
+
+---
+
+### 2. Clone the Repository
+
+```bash
+git clone https://github.com/your-username/leave-management.git
 cd leave-management
+```
+
+---
+
+### 3. Create & Activate a Virtual Environment
+
+#### On Windows (PowerShell):
+```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
+```
+*(If you encounter a script execution policy error on PowerShell, run `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` first)*
+
+#### On Windows (Command Prompt):
+```cmd
+python -m venv .venv
+.\.venv\Scripts\activate.bat
+```
+
+#### On macOS / Linux (Bash / Zsh):
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+---
+
+### 4. Install Dependencies
+
+```bash
 pip install -r requirements.txt
+```
+
+---
+
+### 5. Initialize & Seed the Database
+
+The database is powered by SQLite (`leaves.db`). Run the seed script to create all required tables, departments, leave types, default holidays, and pre-configured demo user accounts:
+
+```bash
+python seed.py
+```
+
+---
+
+### 6. Environment Configuration (Optional)
+
+Create a `.env` file in the root directory if you wish to configure custom settings or enable live email notifications (by default, development fallbacks are used):
+
+```env
+# Application Secret Key
+SECRET_KEY=your-super-secret-key-change-in-production
+
+# Database path (defaults to leaves.db)
+DATABASE_PATH=leaves.db
+
+# Optional SMTP Email configuration
+MAIL_SERVER=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USE_TLS=True
+MAIL_USERNAME=your-email@example.com
+MAIL_PASSWORD=your-email-app-password
+MAIL_DEFAULT_SENDER=noreply@mallareddyuniversity.ac.in
+```
+
+---
+
+### 7. Run the Application
+
+Start the local Flask development server:
+
+```bash
 python app.py
 ```
 
-Open `http://127.0.0.1:5000/` in a browser. Configure `MAIL_USERNAME`, `MAIL_PASSWORD`, and a production `SECRET_KEY` in a `.env` file before enabling email notifications. Development credentials and secrets should not be hard-coded in the application.
+The application will be live at **`http://127.0.0.1:5000/`**.
+
+---
+
+### 8. Demo User Accounts
+
+Use any of the following pre-seeded accounts to explore the role-based portals:
+
+| Role | Name | Email | Password | Details |
+| :--- | :--- | :--- | :--- | :--- |
+| **System Admin** | System Admin | `admin@university.edu` | `Admin@1234` | Full administration & settings |
+| **Faculty / In-charge** | Prof. Anitha Rao | `faculty.cse@university.edu` | `Faculty@123` | CSE Department reviewer |
+| **Faculty / In-charge** | Prof. Ravi Kumar | `faculty.ece@university.edu` | `Faculty@123` | ECE Department reviewer |
+| **Head of Department** | Dr. Suresh Babu | `hod.cse@university.edu` | `Hod@12345` | CSE Department HOD |
+| **Head of Department** | Dr. Meena Devi | `hod.ece@university.edu` | `Hod@12345` | ECE Department HOD |
+| **Student** | A. Kumar | `student1@university.edu` | `Student@123` | CSE student (Roll: 22B81A0501) |
+| **Student** | B. Shruti | `student2@university.edu` | `Student@123` | CSE student (Roll: 22B81A0502) |
+| **Student** | C. Rakesh | `student3@university.edu` | `Student@123` | ECE student (Roll: 22B81A0401) |
+
+> **Note**: You can also register a brand new student account directly from the **Register** page. New students automatically receive a default leave balance of 5 days for each leave category.
+
+---
+
+### 9. Running Automated Tests
+
+Run the complete test suite (60+ unit, validation, auth, and workflow tests):
+
+```bash
+pytest
+```
+
+---
 
 ## Existing Deployment
 
-The original prototype was deployed at https://leave-management-kclb.onrender.com/. Treat this as a prototype reference; production deployment should use a persistent database, environment variables, HTTPS, secure authentication, and proper backup and monitoring.
+The original prototype was deployed at https://leave-management-kclb.onrender.com/. Production deployment should use a persistent database, environment variables, HTTPS, secure authentication, and proper backup and monitoring.
+
