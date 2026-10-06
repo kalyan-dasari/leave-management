@@ -31,7 +31,6 @@
           <dt class="col-sm-4">Leave type</dt>
           <dd class="col-sm-8">{{ leave.leave_type_name }}
             {% if leave.hod_required %}<span class="badge bg-secondary">HOD approval required</span>{% endif %}
-            {% if leave.requires_document %}<span class="badge bg-info text-dark">Document required</span>{% endif %}
           </dd>
           <dt class="col-sm-4">Dates</dt><dd class="col-sm-8">{{ leave.start_date }} &rarr; {{ leave.end_date }}</dd>
           <dt class="col-sm-4">Reason</dt><dd class="col-sm-8">{{ leave.reason }}</dd>
